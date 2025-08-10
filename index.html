@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="zh-HK">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>乒乓球課程預約系統</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app">
+        <!-- 導航欄 -->
+        <nav class="navbar" id="navbar" style="display: none;">
+            <div class="container">
+                <div class="flex items-center justify-between">
+                    <h2 class="navbar-brand">🏓 乒乓球預約系統</h2>
+                    <div class="navbar-menu">
+                        <button class="btn btn--outline btn--sm" onclick="showBookings()">我的預約</button>
+                        <button class="btn btn--secondary btn--sm" onclick="logout()">登出</button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- 首頁 -->
+        <section id="homepage" class="page active">
+            <div class="hero">
+                <div class="container">
+                    <div class="hero-content">
+                        <h1 class="hero-title">🏓 乒乓球課程預約系統</h1>
+                        <p class="hero-subtitle">專業教練指導，輕鬆預約課程</p>
+                        <div class="hero-features">
+                            <div class="feature-item">
+                                <span class="feature-icon">👨‍🏫</span>
+                                <span>經驗豐富教練</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="feature-icon">⏰</span>
+                                <span>彈性時間安排</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="feature-icon">👨‍👩‍👧‍👦</span>
+                                <span>適合各年齡層</span>
+                            </div>
+                        </div>
+                        <div class="hero-actions">
+                            <button class="btn btn--primary btn--lg" onclick="showLogin()">登錄</button>
+                            <button class="btn btn--outline btn--lg" onclick="showRegister()">新用戶註冊</button>
+                        </div>
+                        <div class="hero-actions mt-16">
+                            <button class="btn btn--secondary btn--sm" onclick="showCoachLogin()">教練登錄</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 註冊頁面 -->
+        <section id="register-page" class="page">
+            <div class="container py-32">
+                <div class="form-container">
+                    <div class="form-header">
+                        <h2>新用戶註冊</h2>
+                        <p class="text-secondary">請填寫以下信息來創建您的帳戶</p>
+                    </div>
+                    <form id="register-form" class="form">
+                        <div class="form-group">
+                            <label class="form-label" for="parentName">家長姓名 *</label>
+                            <input type="text" id="parentName" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="phone">聯絡電話 *</label>
+                            <input type="tel" id="phone" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="email">電郵地址 *</label>
+                            <input type="email" id="email" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="studentName">學生姓名 *</label>
+                            <input type="text" id="studentName" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="studentAge">學生年齡 *</label>
+                            <input type="number" id="studentAge" class="form-control" min="5" max="18" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="level">乒乓球經驗水平 *</label>
+                            <select id="level" class="form-control" required>
+                                <option value="">請選擇</option>
+                                <option value="初學者">初學者</option>
+                                <option value="中級">中級</option>
+                                <option value="進階">進階</option>
+                            </select>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn--primary btn--full-width">完成註冊</button>
+                            <button type="button" class="btn btn--outline btn--full-width mt-8" onclick="showHomepage()">返回首頁</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- 登錄頁面 -->
+        <section id="login-page" class="page">
+            <div class="container py-32">
+                <div class="form-container">
+                    <div class="form-header">
+                        <h2>用戶登錄</h2>
+                        <p class="text-secondary">請輸入您的電郵地址進行登錄</p>
+                    </div>
+                    <form id="login-form" class="form">
+                        <div class="form-group">
+                            <label class="form-label" for="loginEmail">電郵地址 *</label>
+                            <input type="email" id="loginEmail" class="form-control" required>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn--primary btn--full-width">登錄</button>
+                            <button type="button" class="btn btn--outline btn--full-width mt-8" onclick="showHomepage()">返回首頁</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- 主預約頁面 -->
+        <section id="booking-page" class="page">
+            <div class="container py-16">
+                <div class="booking-header">
+                    <h2>課程預約</h2>
+                    <p class="welcome-text">歡迎，<span id="welcomeUser"></span>！</p>
+                </div>
+                
+                <div class="booking-grid">
+                    <!-- 日期選擇 -->
+                    <div class="card">
+                        <div class="card__body">
+                            <h3>選擇日期</h3>
+                            <div class="date-selector">
+                                <input type="date" id="dateSelector" class="form-control" min="2025-08-15">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 可用時間段 -->
+                    <div class="card">
+                        <div class="card__body">
+                            <h3>可用時間段</h3>
+                            <div id="availableSlots" class="slots-container">
+                                <p class="text-secondary">請選擇日期查看可用時間段</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 教練信息 -->
+                <div class="card mt-16">
+                    <div class="card__body">
+                        <h3>我們的教練團隊</h3>
+                        <div class="coaches-grid">
+                            <div class="coach-card">
+                                <h4>👨‍🏫 張教練</h4>
+                                <p>10年教學經驗</p>
+                                <p class="coach-specialty">專長：兒童基礎訓練</p>
+                            </div>
+                            <div class="coach-card">
+                                <h4>👩‍🏫 李教練</h4>
+                                <p>8年教學經驗</p>
+                                <p class="coach-specialty">專長：技術提升</p>
+                            </div>
+                            <div class="coach-card">
+                                <h4>👨‍🏫 王教練</h4>
+                                <p>12年教學經驗</p>
+                                <p class="coach-specialty">專長：比賽訓練</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 預約確認頁面 -->
+        <section id="confirm-page" class="page">
+            <div class="container py-32">
+                <div class="form-container">
+                    <div class="form-header">
+                        <h2>確認預約</h2>
+                        <p class="text-secondary">請確認以下預約詳情</p>
+                    </div>
+                    <div class="confirmation-details">
+                        <div class="detail-item">
+                            <span class="detail-label">日期時間：</span>
+                            <span id="confirmDateTime"></span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">課程類型：</span>
+                            <span id="confirmType"></span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">教練：</span>
+                            <span id="confirmCoach"></span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">學生：</span>
+                            <span id="confirmStudent"></span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">費用：</span>
+                            <span id="confirmPrice" class="price">$0</span>
+                        </div>
+                    </div>
+                    <div class="policy-notice">
+                        <p><strong>取消政策：</strong>需於課程開始前24小時取消，否則不予退款</p>
+                    </div>
+                    <div class="form-actions">
+                        <button class="btn btn--primary btn--full-width" onclick="confirmBooking()">確認預約</button>
+                        <button class="btn btn--outline btn--full-width mt-8" onclick="showBooking()">返回修改</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 我的預約頁面 -->
+        <section id="my-bookings-page" class="page">
+            <div class="container py-16">
+                <div class="page-header">
+                    <h2>我的預約</h2>
+                    <button class="btn btn--outline btn--sm" onclick="showBooking()">預約新課程</button>
+                </div>
+                <div id="bookingsList" class="bookings-list">
+                    <!-- 動態載入預約列表 -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 教練管理頁面 -->
+        <section id="coach-page" class="page">
+            <div class="container py-16">
+                <div class="page-header">
+                    <h2>🏓 教練管理面板</h2>
+                    <button class="btn btn--secondary btn--sm" onclick="logout()">登出</button>
+                </div>
+                
+                <div class="coach-grid">
+                    <!-- 今日課程 -->
+                    <div class="card">
+                        <div class="card__body">
+                            <h3>今日課程安排</h3>
+                            <div id="todaySchedule" class="schedule-list">
+                                <!-- 動態載入今日課程 -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 學生名單 -->
+                    <div class="card">
+                        <div class="card__body">
+                            <h3>學生名單</h3>
+                            <div id="studentsList" class="students-list">
+                                <!-- 動態載入學生名單 -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 新增時間段 -->
+                <div class="card mt-16">
+                    <div class="card__body">
+                        <h3>新增可用時間段</h3>
+                        <form id="add-slot-form" class="form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label" for="slotDate">日期</label>
+                                    <input type="date" id="slotDate" class="form-control" min="2025-08-15" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="slotTime">時間</label>
+                                    <input type="time" id="slotTime" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="slotType">課程類型</label>
+                                    <select id="slotType" class="form-control" required>
+                                        <option value="一對一課程">一對一課程 ($350)</option>
+                                        <option value="小組課程">小組課程 ($150)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="slotCoach">教練</label>
+                                    <select id="slotCoach" class="form-control" required>
+                                        <option value="張教練">張教練</option>
+                                        <option value="李教練">李教練</option>
+                                        <option value="王教練">王教練</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn--primary">新增時間段</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 成功提示 -->
+        <div id="successModal" class="modal hidden">
+            <div class="modal-overlay" onclick="closeModal()"></div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>預約成功！</h3>
+                </div>
+                <div class="modal-body">
+                    <p>✅ 您的課程預約已確認</p>
+                    <p>我們將通過電話或電郵與您確認詳細安排</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn--primary" onclick="closeModal()">確定</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
